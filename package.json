@@ -1,6 +1,6 @@
 {
-  "name": "edge-tts-chrome-extension",
-  "version": "1.0.2",
+  "name": "edge-tts-firefox-extension",
+  "version": "1.0.0",
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
