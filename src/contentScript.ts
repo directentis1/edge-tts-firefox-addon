@@ -17,7 +17,7 @@ window.stopPlayback = stopPlayback;
 export async function initTTS(text) {
   cleanup();
   try {
-    const settings = await chrome.storage.sync.get({
+    const settings = await browser.storage.sync.get({
       voiceName: "en-US-ChristopherNeural",
       customVoice: "",
       speed: 1.2,
@@ -186,7 +186,7 @@ function removeControlPanel() {
 }
 
 // Message listener
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "stopPlayback") {
     stopPlayback();
     return;
