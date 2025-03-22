@@ -28,7 +28,7 @@ function Popup() {
 
   useEffect(() => {
     // Load saved settings
-    chrome.storage.sync.get(['voiceName', 'speed', 'customVoice', 'darkMode'], (result) => {
+    browser.storage.sync.get(['voiceName', 'speed', 'customVoice', 'darkMode'], (result) => {
       if (result.voiceName) {
         setSelectedVoice(result.voiceName);
       }
@@ -51,31 +51,31 @@ function Popup() {
 
   const handleVoiceChange = (voice) => {
     setSelectedVoice(voice);
-    chrome.storage.sync.set({ voiceName: voice });
+    browser.storage.sync.set({ voiceName: voice });
   };
 
   const handleCustomVoiceChange = (customVoice) => {
     setCustomVoice(customVoice);
-    chrome.storage.sync.set({ customVoice: customVoice });
+    browser.storage.sync.set({ customVoice: customVoice });
   };
 
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);
-    chrome.storage.sync.set({ speed: newSpeed });
+    browser.storage.sync.set({ speed: newSpeed });
   };
 
   const handleDarkModeToggle = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     document.documentElement.classList.toggle('dark', newDarkMode);
-    chrome.storage.sync.set({ darkMode: newDarkMode });
+    browser.storage.sync.set({ darkMode: newDarkMode });
   };
 
   const handlePlayClick = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+    browser.tabs.query({ active: true, currentWindow: true }, (tabs: browser.tabs.Tab[]) => {
       const tab = tabs[0];
       if (tab && tab.id) {
-        chrome.scripting.executeScript(
+        browser.scripting.executeScript(
           {
             target: { tabId: tab.id },
             func: () => {
@@ -83,15 +83,15 @@ function Popup() {
             },
           },
           (injectionResults) => {
-            if (chrome.runtime.lastError) {
-              console.error(chrome.runtime.lastError);
+            if (browser.runtime.lastError) {
+              console.error(browser.runtime.lastError);
               return;
             }
             for (const frameResult of injectionResults) {
               const pageContent = frameResult.result as string;
               if (pageContent && pageContent.trim() !== '') {
                 // handlePlay(pageContent);
-                chrome.tabs.sendMessage(tab.id, {
+                browser.tabs.sendMessage(tab.id, {
                   action: "readText",
                   text: pageContent,
                 });
